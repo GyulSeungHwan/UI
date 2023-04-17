@@ -31,7 +31,7 @@ public class DelMemberServlet extends HttpServlet {
 		if(result) {
 			resp.sendRedirect("empList");
 		} else {
-			resp.sendRedirect("delForm.html");
+			resp.sendRedirect("../delForm.html");
 		}
 		
 //		try {

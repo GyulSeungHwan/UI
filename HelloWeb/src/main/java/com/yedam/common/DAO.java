@@ -15,7 +15,7 @@ public class DAO {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-				
+			
 		try {
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
 		} catch (SQLException e) {

@@ -112,7 +112,7 @@ public class EmpDAO {
 		String sql = "SELECT * FROM employees ORDER BY 1 DESC";
 		conn = DAO.getConnect();
 		try {
-			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt = conn.prepareStatement(sql);
 			rs = psmt.executeQuery();
 			while(rs.next()) {
 				Employee emp = new Employee();
