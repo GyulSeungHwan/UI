@@ -46,8 +46,8 @@ public class EmpListServlet extends HttpServlet {
 			for (Employee emp : list) {
 //				System.out.println("eid: " + rs.getInt("employee_id") + "fName: " + rs.getString("first_name") + "lName: " + rs.getString("last_name") + "email: " + rs.getString("email") + "phone: " + rs.getString("phone_number"));
 				// 사원번호, fName, lname, email, phone...
-				out.print("<tr><td><a href = 'searchMember?emp_id="+ emp.getEmployeeId() + "'>"
-						+ emp.getEmployeeId() + "</td> <td>"
+				out.print("<tr><td><a href = 'searchMember?empid="+ emp.getEmployeeId() + "'>"
+						+ emp.getEmployeeId() + "</a></td> <td>"
 						+ emp.getFirstName()
 						+ "</td> <td>" + emp.getLastName()
 						+ "</td> <td>" + emp.getEmail()
