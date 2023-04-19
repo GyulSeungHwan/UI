@@ -29,6 +29,35 @@ public class EmpDAO {
 		}
 	}
 	
+	// 로그인(사원번호, 이메일)
+	public Employee loginCheck(Employee emp) {
+		conn = DAO.getConnect();
+		String sql = "SELECT * FROM employees WHERE employee_id = ? and email = ?";
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, emp.getEmployeeId());
+			psmt.setString(2, emp.getEmail());
+			
+			rs = psmt.executeQuery();
+			if (rs.next()) {
+				Employee result = new Employee();
+				result.setEmployeeId(rs.getInt("employee_id"));
+				result.setFirstName(rs.getString("first_name"));
+				result.setLastName(rs.getString("last_name"));
+				result.setEmail(rs.getString("email"));
+				result.setJobId(rs.getString("job_id"));
+				
+				return result;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return null;
+	}
+	
+	
 	// 수정처리
 	public boolean updateMember(Employee emp) {
 		String sql = "UPDATE employees SET first_name = ?, last_name = ?, email = ? WHERE employee_id = ?";
