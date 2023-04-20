@@ -29,9 +29,9 @@
 	<insert id="insertNotice" parameterType="notice">
 		insert into tbl_notice
 		(notice_id, notice_writer, notice_title,
-		notice_subject)
+		notice_subject, attach_file)
 		values(notice_seq.nextval, #{noticeWriter}, #{noticeTitle},
-		#{noticeSubject})
+		#{noticeSubject}, #{attachFile})
 	</insert>
 	<update id="updateNotice" parameterType="notice">
 		update tbl_notice
@@ -46,5 +46,9 @@
 		parameterType="int">
 		select * from tbl_notice where notice_id=#{noticeId}
 	</select>
+	
+	<update id = "updateCount" parameterType="int">
+	 update tbl_notice set hit_count=hit_count+1 where notice_id=#{noticeId}
+	</update>
 
 </mapper>

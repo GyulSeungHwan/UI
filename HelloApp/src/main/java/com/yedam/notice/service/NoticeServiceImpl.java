@@ -22,7 +22,7 @@ public class NoticeServiceImpl implements NoticeService {
 	public boolean addNotice(NoticeVO vo) {
 		return mapper.insertNotice(vo) == 1;
 	}
-
+	
 	@Override
 	public boolean modifyNotice(NoticeVO vo) {
 		return mapper.updateNotice(vo) == 1;
@@ -35,6 +35,8 @@ public class NoticeServiceImpl implements NoticeService {
 
 	@Override
 	public NoticeVO getNotice(int noticeId) {
+		//조회수 증가
+		mapper.updateCount(noticeId);
 		return mapper.searchNotice(noticeId);
 	}
 	

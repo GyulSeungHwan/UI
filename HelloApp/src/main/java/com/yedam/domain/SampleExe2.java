@@ -12,12 +12,12 @@ public class SampleExe2 {
 		try (SqlSession session = sqlSessionFactory.openSession(true)) {
 			NoticeMapper mapper = session.getMapper(NoticeMapper.class);
 			NoticeVO nvo = new NoticeVO();
-			nvo.setNoticeWriter("user00");
-			nvo.setNoticeTitle("re:tttest");
-			nvo.setNoticeSubject("re:글내용입니다....아.");
-			mapper.insertNotice(nvo);
-			mapper.updateNotice(nvo);
-//			mapper.deleteNotice(4);
+//			nvo.setNoticeWriter("user00");
+//			nvo.setNoticeTitle("re:tttest");
+//			nvo.setNoticeSubject("re:글내용입니다....아.");
+//			mapper.insertNotice(nvo);
+//			mapper.updateNotice(nvo);
+//			mapper.deleteNotice(9);
 //			System.out.println(mapper.searchNotice(3));
 			
 			for(NoticeVO vo : mapper.noticeList()) {
