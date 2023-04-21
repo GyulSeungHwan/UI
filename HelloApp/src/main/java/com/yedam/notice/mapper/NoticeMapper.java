@@ -12,10 +12,13 @@ public interface NoticeMapper {
 	public int addEmp(Employee emp);
 	// 공지사항 CRUD: 입력, 조회, 수정, 삭제, 목록
 	public List<NoticeVO> noticeList();
+	 // 페이징리스트
+	public List<NoticeVO> noticeWithPage(int page);
 	public int insertNotice(NoticeVO vo);
 	public int updateNotice(NoticeVO vo);
 	public int deleteNotice(int noticeId);
 	public NoticeVO searchNotice(int noticeId);
 	// 조회수증가
 	public int updateCount(int noticeId);
+	public int getCount();
 }

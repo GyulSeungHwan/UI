@@ -21,10 +21,12 @@ public class GetNoticeControl implements Control {
 		// param: nid
 		
 		String nid = req.getParameter("nid");
+		String page = req.getParameter("page");
 		
 		NoticeService service = new NoticeServiceImpl();
 		NoticeVO vo = service.getNotice(Integer.parseInt(nid));
 		req.setAttribute("noticeInfo", vo);
+		req.setAttribute("pageNum", page);
 		
 		// 첨부파일이 있으면...?
 		// 첨부파일의 타입을 체크

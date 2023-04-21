@@ -26,6 +26,16 @@
 		select * from tbl_notice
 		order by 1 desc
 	</select>
+	<select id="noticeWithPage" resultType="notice">
+	 	<![CDATA[
+		SELECT b.*
+		FROM (SELECT ROWNUM rn, a.*
+			  FROM (SELECT * FROM tbl_notice
+					ORDER BY 1 DESC) a
+			  WHERE ROWNUM <= ${page} * 10) b
+		WHERE b.rn > (${page} - 1) * 10
+		]]>
+	</select>
 	<insert id="insertNotice" parameterType="notice">
 		insert into tbl_notice
 		(notice_id, notice_writer, notice_title,
@@ -35,20 +45,27 @@
 	</insert>
 	<update id="updateNotice" parameterType="notice">
 		update tbl_notice
-		set notice_title=#{noticeTitle},
+		set
+		notice_title=#{noticeTitle},
 		notice_subject=#{noticeSubject}
-		where notice_id = #{noticeId}
+		where
+		notice_id = #{noticeId}
 	</update>
 	<delete id="deleteNotice" parameterType="int">
-		delete from tbl_notice where notice_id = ${noticeId}
+		delete from tbl_notice
+		where notice_id = ${noticeId}
 	</delete>
 	<select id="searchNotice" resultType="notice"
 		parameterType="int">
 		select * from tbl_notice where notice_id=#{noticeId}
 	</select>
-	
-	<update id = "updateCount" parameterType="int">
-	 update tbl_notice set hit_count=hit_count+1 where notice_id=#{noticeId}
+
+	<update id="updateCount" parameterType="int">
+		update tbl_notice set
+		hit_count=hit_count+1 where notice_id=#{noticeId}
 	</update>
 
+	<select id="getCount" resultType="int">
+		select count(*) from tbl_notice
+	</select>
 </mapper>
