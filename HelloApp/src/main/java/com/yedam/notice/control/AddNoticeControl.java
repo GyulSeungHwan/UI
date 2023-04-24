@@ -38,6 +38,7 @@ public class AddNoticeControl implements Control {
 		vo.setNoticeWriter(writer);
 		
 		NoticeService service = new NoticeServiceImpl();
+		// 정상처리 -> 목록이동
 		if (service.addNotice(vo)) {
 			return "noticeList.do";
 		} else {

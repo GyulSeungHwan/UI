@@ -15,9 +15,12 @@ import com.yedam.member.control.LoginControl;
 import com.yedam.member.control.LoginFormControl;
 import com.yedam.member.control.LogoutControl;
 import com.yedam.notice.control.AddNoticeControl;
+import com.yedam.notice.control.AddReplyControl;
+import com.yedam.notice.control.DeleteReplyControl;
 import com.yedam.notice.control.GetNoticeControl;
 import com.yedam.notice.control.NoticeAddForm;
 import com.yedam.notice.control.NoticeListControl;
+import com.yedam.notice.control.ReplyListControl;
 import com.yedam.notice.control.ModifyNoticeControl;
 
 public class FrontController extends HttpServlet {
@@ -44,6 +47,11 @@ public class FrontController extends HttpServlet {
 		map.put("/loginForm.do", new LoginFormControl());
 		map.put("/login.do", new LoginControl());
 		map.put("/logout.do", new LogoutControl());
+		
+		// 댓글정보
+		map.put("/replyList.do", new ReplyListControl());
+		map.put("/addReply.do", new AddReplyControl());
+		map.put("/removeReply.do", new DeleteReplyControl());
 	}
 	
 	@Override
@@ -61,6 +69,12 @@ public class FrontController extends HttpServlet {
 		
 		if (viewPage.endsWith(".do")) {
 			resp.sendRedirect(viewPage);
+			return;
+		}
+		
+		if (viewPage.endsWith(".json")) {
+			resp.setContentType("text/json;charset=UTF-8");
+			resp.getWriter().print(viewPage.substring(0, viewPage.length() - 5)); // .json을 안보이게 하려고 -5를 넣었다
 			return;
 		}
 		
