@@ -77,9 +77,20 @@
 	</tbody>
 </table>
 
+<table style="display: none;">
+	<tbody>
+		<tr class="template">
+			<td>10</td>
+			<td><input type="text" class="reply"></td>
+			<td>user01</td>
+			<td><button>수정</button></td>
+		</tr>
+	</tbody>
+</table>
+
 <script>
  let showFields = ['replyId', 'reply', 'replyWriter']
- let xhtp = new XMLHttpRequest();
+ let xhtp = new XMLHttpRequest(); // Ajax 호출
  xhtp.open('get', 'replyList.do?nid=${noticeInfo.noticeId}');
  xhtp.send();
  xhtp.onload = function () {
@@ -94,9 +105,65 @@
 		 }
 	 }
  
-//tr 생성해주는 함수
+// tr 생성해주는 함수
  function makeTrFunc(reply = {}) {
      let tr = document.createElement('tr');
+     tr.id = reply.replyId; // tr에 속성추가: 댓글번호
+     
+     // this 1) Object 안에서 사용되면 object 자체를 가리킴
+     //      let obj = {name: "hong", age: 20, showInfo: function() {this.age + this.name}}
+     //      2) function 선언 안에서 this는 window 전역객체 <-> 지역
+     //      function add() {console.log(this)}
+     //      3) event 안에서 사용되는 this는 이벤트 받는 대상
+     //      document.getElementById('tlist').addEventListener('click', function() {console.log(this)})
+     // tr 클릭이벤트
+     tr.addEventListener('dblclick', function (e) {
+    	 let writer = this.children[2].innerText;
+    	 
+    	 console.log(writer, '${id}');
+    	 if (writer != '${id}') {
+    		 alert('권한이 없습니다')
+    		 return;
+    	 }
+    	 console.log(this);
+    	 let template = document.querySelector('.template').cloneNode(true);
+    	 console.log(template);
+    	 //template.children[0].innerText = reply.replyId;
+    	 //template.children[1].children[0].value = reply.reply;
+    	 //template.children[2].innerText = reply.replywriter;
+    	 template.querySelector('td:nth-of-type(1)').innerText = reply.replyId;
+    	 template.querySelector('td:nth-of-type(2)>input').value = reply.reply;
+    	 template.querySelector('td:nth-of-type(3)').innerText = reply.replyWriter;
+    	 template.querySelector('button').addEventListener('click', function (e) {
+    		 // Ajax 호출
+    		 let replyId = reply.replyId;
+    		 let replyCon = this.parentElement.parentElement.children[1].children[0].value;
+    		 console.log(replyId, replyCon);
+    		 
+    		 let xhtp = new XMLHttpRequest();
+    		 xhtp.open('post', 'modifyReply.do');
+    		 xhtp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    		 xhtp.send('rid=' + replyId + '&reply=' + replyCon);
+    		 xhtp.onload = function () {
+    			 let result = JSON.parse(xhtp.response);
+    			 if (result.retCode == 'Success') {
+    				 // 화면변경
+    				 alert('성공');
+    				 let newTr = makeTrFunc(result.data);
+    				 oldTr = document.querySelector('.template')
+    				 document.getElementById('tlist').replaceChild(newTr, oldTr);
+    				 
+    			 } else if (result.retCode == 'Fail') {
+    				 alert('처리 중 에러');
+    			 } else {
+    				 alert('알 수 없는 반환값')
+    			 }
+    		 }
+    	 });
+    	 // 화면전환
+    	 document.getElementById('tlist').replaceChild(template, tr);
+     })
+     // td생성
      for (let prop of showFields) {
          let td = document.createElement('td');
          td.innerText = reply[prop]; //prop = 필드값
@@ -105,17 +172,28 @@
      // 삭제버튼
      let btn = document.createElement('button');
      btn.addEventListener('click', function (e) {
-    	 let 삭제글번호 = btn.parentElement.parentElement.children[0].innerText;
+    	 let writer = btn.parentElement.previousElementSibling.innerText;
+    	 
+    	 console.log(writer, '${id}');
+    	 if (writer != '${id}') {
+    		 alert('권한이 없습니다')
+    		 return;
+    	 }
+    	 
+    	 console.log(btn.parentElement.parentElement);
+    	 let 삭제글번호 = btn.parentElement.parentElement.id;
     	 // db에서 삭제 후... 화면에서 삭제
     	 let xhtp = new XMLHttpRequest();
     	 xhtp.open('post', 'removeReply.do');
     	 xhtp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    	 xhtp.send('rid=' + 삭제글번호);
+    	 xhtp.send('rid=' + 삭제글번호); // 요청방식이 post일 경우에 parameter를 send() 포함
     	 
     	 xhtp.onload = function () {
-    		 let result = xhtp.response;
+    		 let result = JSON.parse(xhtp.response);
     		 if(result.retCode == 'Success'){
     			 // 화면에서 지우기
+    			 alert('삭제완료');
+    			 btn.parentElement.parentElement.remove();
     			 
     		 } else if (result.retCode == 'Fail'){
     			 alert('처리 중 에러발생');

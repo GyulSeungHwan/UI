@@ -14,14 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import com.yedam.member.control.LoginControl;
 import com.yedam.member.control.LoginFormControl;
 import com.yedam.member.control.LogoutControl;
+import com.yedam.member.control.RemoveReplyControl;
 import com.yedam.notice.control.AddNoticeControl;
 import com.yedam.notice.control.AddReplyControl;
-import com.yedam.notice.control.DeleteReplyControl;
 import com.yedam.notice.control.GetNoticeControl;
 import com.yedam.notice.control.NoticeAddForm;
 import com.yedam.notice.control.NoticeListControl;
 import com.yedam.notice.control.ReplyListControl;
 import com.yedam.notice.control.ModifyNoticeControl;
+import com.yedam.notice.control.ModifyReplyControl;
 
 public class FrontController extends HttpServlet {
 	
@@ -51,7 +52,12 @@ public class FrontController extends HttpServlet {
 		// 댓글정보
 		map.put("/replyList.do", new ReplyListControl());
 		map.put("/addReply.do", new AddReplyControl());
-		map.put("/removeReply.do", new DeleteReplyControl());
+		map.put("/removeReply.do", new RemoveReplyControl());
+		map.put("/modifyReply.do", new ModifyReplyControl());
+		
+		// 차트생성
+		map.put("/chart.do", new ChartFormControl());
+		map.put("/chartData.do", new ChartDataControl());
 	}
 	
 	@Override

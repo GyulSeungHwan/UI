@@ -23,7 +23,7 @@ public class ReplyListControl implements Control {
 		String json = "[";
 		List<ReplyVO> list = service.getReplies(Integer.parseInt(nid));
 		for(int i = 0; i < list.size(); i++) {
-			json += "{\"replyId\":" + list.get(i).getNoticeId() + ",";
+			json += "{\"replyId\":" + list.get(i).getReplyId() + ",";
 			json += "\"noticeId\":" + list.get(i).getNoticeId() + ",";
 			json += "\"reply\":\"" + list.get(i).getReply() + "\",";
 			json += "\"replyWriter\":\"" + list.get(i).getReplyWriter() + "\",";

@@ -15,34 +15,34 @@ import com.yedam.notice.domain.ReplyVO;
 import com.yedam.notice.service.ReplyService;
 import com.yedam.notice.service.ReplyServiceImpl;
 
-public class DeleteReplyControl implements Control {
+public class ModifyReplyControl implements Control {
 
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String id = req.getParameter("id");
-		String reply = req.getParameter("reply");
-		String noticeId = req.getParameter("notice_id");
-		
+		// 파라미터(댓글번호, 변경된 댯글내용)
+		// update
 		ReplyVO vo = new ReplyVO();
-		vo.setReplyWriter(id);
-		vo.setReply(reply);
-		vo.setNoticeId(Integer.parseInt(noticeId));
+		vo.setReply(req.getParameter("reply"));
+		vo.setReplyId(Integer.parseInt(req.getParameter("rid")));
 		
 		ReplyService service = new ReplyServiceImpl();
-		boolean result = service.deleteReply(vo);
+		boolean result = service.modifyReply(vo);
 		
 		String json = "";
 		
 		Map<String, Object> map = new HashMap<>();
 		
-		if(result) {
+		if (result) {
+			// search
+			vo = service.getReply(vo.getReplyId());
+			
 			map.put("retCode", "Success");
 			map.put("data", vo);
 		} else {
 			map.put("retCode", "Fail");
 		}
 		
-		Gson gson = new GsonBuilder().create();
+		Gson gson = new GsonBuilder().create(); // gson 객체
 		json = gson.toJson(map);
 		
 		return json + ".json";
