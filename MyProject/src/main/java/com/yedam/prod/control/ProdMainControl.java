@@ -22,7 +22,7 @@ public class ProdMainControl implements Control {
 		
 		req.setAttribute("list", list);
 		
-		return "prod/productList.tiles";
+		return "prod/prodList.tiles";
 	}
 
 }

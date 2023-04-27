@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.yedam.prod.control.ProdListControl;
 import com.yedam.prod.control.ProdMainControl;
 
-public class FrontControl  extends HttpServlet {
+public class FrontControl extends HttpServlet {
 	
 	String encoding;
 	private Map<String, Control> map;
