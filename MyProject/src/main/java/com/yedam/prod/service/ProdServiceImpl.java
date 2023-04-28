@@ -17,6 +17,10 @@ public class ProdServiceImpl implements ProdService {
 	public List<ProdVO> prodList() {
 		return mapper.prodList();
 	}
-	
+
+	@Override
+	public ProdVO getProd(int ProdId) {
+		return mapper.searchProd(ProdId);
+	}
 	
 }

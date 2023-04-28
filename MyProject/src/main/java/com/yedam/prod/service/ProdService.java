@@ -6,4 +6,5 @@ import com.yedam.prod.domain.ProdVO;
 
 public interface ProdService {
 	public List<ProdVO> prodList();
+	public ProdVO getProd(int ProdId);
 }

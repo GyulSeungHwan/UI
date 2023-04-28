@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.yedam.prod.control.ProdListControl;
 import com.yedam.prod.control.ProdMainControl;
+import com.yedam.prod.control.ProductAddControl;
+import com.yedam.prod.control.ProductUploadControl;
 
 public class FrontControl extends HttpServlet {
 	
@@ -25,8 +27,12 @@ public class FrontControl extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		encoding = config.getInitParameter("enc");
 		
-		map.put("/prodMain.do", new ProdMainControl());
 		map.put("/prodList.do", new ProdListControl());
+		map.put("/prodMain.do", new ProdMainControl());
+		// ckeditor 관련
+		map.put("/productAdd.do", new ProductAddControl());
+		// ckeditor 이미지 업로드 처리
+		map.put("/prodUpload.do", new ProductUploadControl());
 		
 	}
 	
@@ -44,6 +50,12 @@ public class FrontControl extends HttpServlet {
 		
 		if (viewPage.endsWith(".do")) {
 			resp.sendRedirect(viewPage);
+			return;
+		}
+		
+		if (viewPage.endsWith(".json")) {
+			resp.setContentType("text/json;charset=UTF-8");
+			resp.getWriter().print(viewPage.substring(0, viewPage.length() - 5)); // .json을 안보이게 하려고 -5를 넣었다
 			return;
 		}
 		
