@@ -18,6 +18,11 @@ public class NoticeServiceImpl implements NoticeService {
 //		return mapper.noticeList();
 		return mapper.noticeWithPage(page);
 	}
+	
+	@Override
+	public List<NoticeVO> noticeListJson() {
+		return mapper.noticeList();
+	}
 
 	@Override
 	public boolean addNotice(NoticeVO vo) {
