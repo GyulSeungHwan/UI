@@ -150,13 +150,19 @@ $(document).ready(function () {
 			console.log(data.data);
 			data.data.forEach(function(item) {
 				console.log(item);
-				let li = $('#myUL').append($('<li />').text(item.content))
-				let span = li.append($('<span />').attr('class', 'close').text("\u00D7"));
-        document.querySelector('#myUL').append(li);
+				let li = ($('<li />').text(item.content));
+				li.append($('<span />').attr('class', 'close').text("\u00D7"));
+				$('#myUL').append(li);
 			})
 		}
 	})
+	
+	$('#myUL').on('click', 'span.close', function () {
+		$('li').css('display', 'none');
+	})
 })
+
+
 // // Create a "close" button and append it to each list item
 // var myNodelist = document.getElementsByTagName("LI");
 // var i;
