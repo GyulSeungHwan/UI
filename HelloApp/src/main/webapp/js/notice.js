@@ -77,6 +77,7 @@ $(document).ready(function() {
 		data.append('nfile', e.target.files[0]);
 		
 		console.log(data);
+		
 		$.ajax({
 			url: 'modifyNoticeFile.do',
 			method: 'post',
@@ -84,11 +85,39 @@ $(document).ready(function() {
 			// multipart요청
 			contentType: false,
 			processData: false,
+			error: function (err) {
+				console.error(err);
+			},
+			success: function (result) {
+				console.log(result);
+				// 이미지변경
+				$('img.nAttach').attr('src', 'images/' + result.attachFile);
+			}
+		});
+	})
+	
+	// 모달창의 수정버튼 클릭
+	$('div.modal-body button').on('click', function (e) {
+		let id = $('div.modal-body td.nid').text();
+		let title = $('div.modal-body td.nTitle').text();
+		let subject = $('div.modal-body textarea.nSubject').val();
+		
+		$.ajax({
+			url: 'modifyNoticeJson.do',
+			method: 'post',
+			data: {id: id, title: title, subject: subject},
 			error: function () {
 				
 			},
-			success: function () {
-				
+			success: function (result) {
+				if (result.retCode == 'Success') {
+					console.log(result.retVal); // id, title, file, .....
+					$('#tr_' + result.retVal.noticeId)
+						.find('img').attr('src', 'images/' + result.retVal.attachFile);
+					$('#myModal').hide();
+				} else if (result.retCode == 'Fail') {
+					alert('error 발생')
+				}
 			}
 		});
 	})
@@ -163,7 +192,8 @@ $(document).ready(function() {
 						($('<img>')).css('width', '50px').attr('src', 'images/' + notice.attachFile)
 					),
 					$('<td />').append($('<button />').text('삭제').on('click', deleteRow))
-				)
+				);
+				tr.attr('id', 'tr_' + notice.noticeId);
 				$('#noticeList').append(tr);
 			})
 		}

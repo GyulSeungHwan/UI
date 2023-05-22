@@ -7,14 +7,17 @@
 		select * from employees where
 		employee_id = #{empId}
 	</select>
+	
 	<select id="empList" resultType="employee">
 		select * from employees order by
 		employee_id
 	</select>
+	
 	<delete id="delEmp" parameterType="int">
 		delete from employees where
 		employee_id = #{empId}
 	</delete>
+	
 	<insert id="addEmp" parameterType="employee">
 		insert into employees
 		(employee_id, last_name, email, job_id, hire_date)
@@ -29,6 +32,7 @@
 		order by 1 desc
 		]]>
 	</select>
+	
 	<select id="noticeWithPage" resultType="notice">
 	 	<![CDATA[
 		SELECT b.*
@@ -39,6 +43,7 @@
 		WHERE b.rn > (${page} - 1) * 10
 		]]>
 	</select>
+	
 	<insert id="insertNotice" parameterType="notice">
 		<selectKey keyProperty="noticeId" resultType="int" order="BEFORE">
 			select notice_seq.nextval from dual
@@ -49,6 +54,7 @@
 		values(#{noticeId}, #{noticeWriter}, #{noticeTitle},
 		#{noticeSubject}, #{attachFile})
 	</insert>
+	
 	<update id="updateNotice" parameterType="notice">
 		update tbl_notice
 		set
@@ -57,10 +63,18 @@
 		where
 		notice_id = #{noticeId}
 	</update>
+	
+	<update id="updateNoticeFile" parameterType="notice">
+		update tbl_notice
+		set attach_file = #{attachFile}
+		where notice_id = #{noticeId}
+	</update>
+	
 	<delete id="deleteNotice" parameterType="int">
 		delete from tbl_notice
-		where notice_id = ${noticeId}
+		where notice_id = #{noticeId}
 	</delete>
+	
 	<select id="searchNotice" resultType="notice"
 		parameterType="int">
 		select * from tbl_notice where notice_id=#{noticeId}
