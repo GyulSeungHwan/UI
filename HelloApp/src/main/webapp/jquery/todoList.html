@@ -158,7 +158,7 @@ $(document).ready(function () {
 	})
 	
 	$('#myUL').on('click', 'span.close', function () {
-		$('li').css('display', 'none');
+		$(this).parent().css('display', 'none');
 	})
 })
 
