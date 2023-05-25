@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v03_event1.html</title>
+  <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+  <div class="app">
+    <label>이름<input v-model="name"></label><br>
+    <label>성적<input v-model="score"></label>
+    <button v-on:click="saveScore">저장</button><br>
+    <button v-on:click="orderAsc">이름순정렬</button>
+
+    <h3>학생목록</h3>
+    <ul>
+      <li v-for="stud in studentList">
+        {{stud.name}} - {{stud.score}} 
+        <button v-on:click="deleteScore">삭제</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    new Vue({
+      el: '.app',
+      data: {
+        studentList: [],
+        name: '',
+        score: ''
+      },
+      methods: {
+        saveScore: function () {
+          this.studentList.push(
+            {name:this.name, 
+             score:this.score}
+            );
+        },
+        deleteScore: function (index) {
+          this.studentList.splice(index, 1);
+        },
+        orderAsc: function () {
+          this.studentList.sort(function (a, b) {return a.name < b.name ? -1 : a.name > b.name ? 1 : 0})
+        }
+      },
+      updated: function () {
+        console.log('updated hook')
+      }
+    })
+  </script>
+</body>
+
+</html>
