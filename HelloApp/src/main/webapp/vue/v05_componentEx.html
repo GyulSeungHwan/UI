@@ -16,39 +16,49 @@
     <input-component v-on:up-count="countUp"></input-component>
   </div>
 
+  <script type="text/x-template" id="inputTemplate">
+    <div>
+      <div class="userAdd">
+        <div class="nameInfo">
+          <label for="userName">이름</label>
+          <input id="userName" v-model="userName">
+        </div>
+        <div class="ageInfo">
+          <label for="userAge">나이</label>
+          <input id="userAge" v-model="userAge">
+        </div>
+        <div class="deptInfo">
+          <label for="userDept">소속</label>
+          <select id="userDept" v-model="userDept">
+            <option>학생</option>
+            <option>교사</option>
+          </select>
+        </div>
+        <div class="inputInfo">
+          <h2>등록 예정자 정보</h2>
+          <p> 이름 : {{userName}} </p>
+          <p> 나이 : {{userAge}} </p>
+          <p> 소속 : {{userDept}} </p>
+        </div>
+        <button v-on:click="insertUsers">등록</button>
+      </div>
+      <div class="userList">
+        <print-component v-for="user in userList" v-bind:userInfo="user"></print-component>
+      </div>
+    </div>
+  </script>
+
   <script>
-    const InputComponent = {
+    const PrintComponent = {
       template: `
       <div>
-        <div class="userAdd">
-          <div class="nameInfo">
-            <label for="userName">이름</label>
-            <input id="userName" v-model="userName">
-          </div>
-          <div class="ageInfo">
-            <label for="userAge">나이</label>
-            <input id="userAge" v-model="userAge">
-          </div>
-          <div class="deptInfo">
-            <label for="userDept">소속</label>
-            <select id="userDept" v-model="userDept">
-              <option>학생</option>
-              <option>교사</option>
-            </select>
-          </div>
-          <div class="inputInfo">
-            <h2>등록 예정자 정보</h2>
-            <p> 이름 : {{userName}} </p>
-            <p> 나이 : {{userAge}} </p>
-            <p> 소속 : {{userDept}} </p>
-          </div>
-          <button v-on:click="insertUsers">등록</button>
-        </div>
-        <div class="userList">
-          <print-component v-for="user in userList" v-bind:userInfo="user"></print-component>
-        </div>
+        <p>이름: {{userInfo.name}}, 나이: {{userInfo.age}}, 소속: {{userInfo.dept}}</p>
       </div>
       `,
+      props: ['userInfo']
+    }
+    const InputComponent = {
+      template: `#inputTemplate`, 
       data: function () {
         return {
           userName: '',
@@ -60,22 +70,15 @@
       methods: {
         insertUsers: function () {
           this.userList.push({
-            name: this.userName, 
-            age: this.userAge, 
+            name: this.userName,
+            age: this.userAge,
             dept: this.userDept
           })
           this.$emit('up-count'); // 상위 요소의 이벤트를 트리거
         }
       },
       components: {
-        'print-component': {
-          template: `
-          <div>
-            <p>이름: {{userInfo.name}}, 나이: {{userInfo.age}}, 소속: {{userInfo.dept}}</p>
-          </div>
-          `,
-          props: ['userInfo']
-        }
+        'print-component': PrintComponent
       }
     } // end of const InputComponent
     new Vue({

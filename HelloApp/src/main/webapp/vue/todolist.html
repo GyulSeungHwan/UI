@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+
+  <div id="app">
+    <h2>To Do List</h2>
+    <input-component v-on:up-count="countUp" v-bind:todolist="todoList"></input-component>
+    <p>{{completeCount}} / {{count}}</p>
+  </div>
+
+  <script>
+    const PrintComponent = {
+      template: `
+      <div>
+        <label><input type="checkbox" v-model="todoInfo.checked" v-on:click="complete">{{todoInfo.todo}} (완료일: {{todoInfo.date}})</label>
+      </div>
+      `,
+      props: ['todoInfo'],
+      methods: {
+        complete: function () {
+          
+          }
+        }
+    }
+    const InputComponent = {
+      template: `
+      <div>
+        <div class="todoList">
+          <print-component v-for="todo in todolist" v-bind:todoInfo="todo"></print-component>
+        </div>
+        <div class="todoAdd">
+          <div>
+            <input id="todo" v-model="todo" v-on:keyup="updateTodo">
+            <input id="date" v-model="date" v-on:keyup="updateTodo">
+          </div>
+          <button v-on:click="deleteComplete">처리완료삭제</button>
+          <button v-on:click="completeSort">완료일순정렬</button>
+        </div>
+      </div>
+      `,
+      props: ['todolist'],
+      data: function () {
+        return {
+          checked: '',
+          todo: '',
+          date: '',
+        }
+      },
+      methods: {
+        updateTodo: function () {
+          this.$emit('up-count', this.todo, this.date);
+        },
+        deleteComplete: function () {
+
+        },
+        completeSort: function () {
+          this.todoList.sort(function (a, b) {return a.date < b.date ? -1 : a.date > b.date ? 1 : 0})
+        }
+      },
+      components: {
+        'print-component': PrintComponent
+      }
+    }
+    new Vue({
+      el: '#app',
+      data: {
+        count: 0,
+        completeCount: 0,
+        todoList: []
+      },
+      methods: {
+        countUp: function (todo, date) {
+          // console.log(event);
+          if (event.keyCode == 13) {
+            this.todoList.push({
+              checked: false,
+              todo: todo,
+              date: date,
+            })
+            this.count++;
+          }
+        }
+      },
+      components: {
+        'input-component': InputComponent
+      }
+    })
+  </script>
+
+</body>
+
+</html>
