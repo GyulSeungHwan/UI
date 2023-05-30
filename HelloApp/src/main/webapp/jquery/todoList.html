@@ -151,6 +151,7 @@ $(document).ready(function () {
 			data.data.forEach(function(item) {
 				console.log(item);
 				let li = ($('<li />').text(item.content));
+				$('#myUL').find('li').eq(1).attr('class', 'checked');
 				li.append($('<span />').attr('class', 'close').text("\u00D7"));
 				$('#myUL').append(li);
 			})
@@ -160,9 +161,23 @@ $(document).ready(function () {
 	$('#myUL').on('click', 'span.close', function () {
 		$(this).parent().css('display', 'none');
 	})
+	
+	$('#myUL').on('click', 'li', function () {
+		$(this).toggleClass('checked');
+	})
+	
+	function newElement() {
+		let li = $('<li />');
+		let inputValue = $('#myInput').value;
+		li.append($(inputValue).textNode);
+		if (inputValue === '') {
+			alert("You must write something!");
+		} else {
+			$('#myUL').append(li);
+		}
+		$('#myInput').value = "";
+	}
 })
-
-
 // // Create a "close" button and append it to each list item
 // var myNodelist = document.getElementsByTagName("LI");
 // var i;
