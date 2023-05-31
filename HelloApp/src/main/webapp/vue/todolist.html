@@ -7,27 +7,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="https://unpkg.com/vue@2"></script>
+  <style>
+    .checked{
+      text-decoration: line-through;
+      color: #ccc;
+    }
+  </style>
 </head>
 
 <body>
 
   <div id="app">
     <h2>To Do List</h2>
-    <input-component v-on:up-count="countUp" v-bind:todolist="todoList"></input-component>
+    <input-component v-on:up-count="countUp" v-bind:todolist="todoList" v-on:complete="complete"></input-component>
     <p>{{completeCount}} / {{count}}</p>
   </div>
 
   <script>
     const PrintComponent = {
       template: `
-      <div>
-        <label><input type="checkbox" v-model="todoInfo.checked" v-on:click="complete">{{todoInfo.todo}} (완료일: {{todoInfo.date}})</label>
+      <div :class="{checked : todoInfo.checked}">
+        <label><input type="checkbox" v-bind:checked="todoInfo.checked" v-on:click="complete(index)">{{todoInfo.todo}} (완료일: {{todoInfo.date}})</label>
       </div>
       `,
-      props: ['todoInfo'],
+      props: ['todoInfo', 'index'],
       methods: {
-        complete: function () {
-          
+        complete: function (idx) {
+          this.$emit('insert-todo', idx);
           }
         }
     }
@@ -35,7 +41,7 @@
       template: `
       <div>
         <div class="todoList">
-          <print-component v-for="todo in todolist" v-bind:todoInfo="todo"></print-component>
+          <print-component v-for="(todo,index) in todolist" v-bind:todoInfo="todo" :index="index" v-on:insert-todo="insertTodo"></print-component>
         </div>
         <div class="todoAdd">
           <div>
@@ -59,22 +65,23 @@
         updateTodo: function () {
           this.$emit('up-count', this.todo, this.date);
         },
-        deleteComplete: function () {
-
+        deleteComplete: function (idx) {
+          this.todoList[idx].checked.splice(1, idx);
         },
         completeSort: function () {
           this.todoList.sort(function (a, b) {return a.date < b.date ? -1 : a.date > b.date ? 1 : 0})
+        },
+        insertTodo: function (idx) {
+          this.$emit('complete', idx);
         }
       },
       components: {
         'print-component': PrintComponent
       }
     }
-    new Vue({
+    let app = new Vue({
       el: '#app',
       data: {
-        count: 0,
-        completeCount: 0,
         todoList: []
       },
       methods: {
@@ -86,8 +93,22 @@
               todo: todo,
               date: date,
             })
-            this.count++;
           }
+        },
+        complete: function (idx) {
+          this.todoList[idx].checked = !this.todoList[idx].checked;
+        }
+      },
+      computed: {
+        count: function () {
+          return this.todoList.length;
+        },
+        completeCount: function () {
+          let newArray = this.todoList.filter(function (item) {
+            return item.checked == true;
+          })
+          let length = newArray.length;
+          return length;
         }
       },
       components: {
