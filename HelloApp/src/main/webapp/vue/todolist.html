@@ -19,7 +19,7 @@
 
   <div id="app">
     <h2>To Do List</h2>
-    <input-component v-on:up-count="countUp" v-bind:todolist="todoList" v-on:complete="complete"></input-component>
+    <input-component v-on:up-count="countUp" v-on:complete-sort="completeSort" v-on:delete-complete="deleteComplete" v-bind:todolist="todoList" v-on:complete="complete"></input-component>
     <p>{{completeCount}} / {{count}}</p>
   </div>
 
@@ -45,7 +45,7 @@
         </div>
         <div class="todoAdd">
           <div>
-            <input id="todo" v-model="todo" v-on:keyup="updateTodo">
+            <input id="todo" v-model="todo">
             <input id="date" v-model="date" v-on:keyup="updateTodo">
           </div>
           <button v-on:click="deleteComplete">처리완료삭제</button>
@@ -63,13 +63,17 @@
       },
       methods: {
         updateTodo: function () {
-          this.$emit('up-count', this.todo, this.date);
+          if (event.keyCode == 13) {
+            this.$emit('up-count', this.todo, this.date);
+            this.todo = '';
+            this.date = '';
+          }
         },
         deleteComplete: function () {
-          
+          this.$emit('delete-complete')
         },
         completeSort: function () {
-          this.todoList.sort(function (a, b) {return a.date < b.date ? -1 : a.date > b.date ? 1 : 0})
+          this.$emit('complete-sort')
         },
         insertTodo: function (idx) {
           this.$emit('complete', idx);
@@ -87,16 +91,30 @@
       methods: {
         countUp: function (todo, date) {
           // console.log(event);
-          if (event.keyCode == 13) {
             this.todoList.push({
               checked: false,
               todo: todo,
               date: date,
             })
-          }
         },
         complete: function (idx) {
           this.todoList[idx].checked = !this.todoList[idx].checked;
+        },
+        completeSort: function () {
+          this.todoList.sort(function (a, b) {return a.date < b.date ? -1 : a.date > b.date ? 1 : 0})
+        },
+        deleteComplete: function () {
+          // let length = this.todoList.length;
+          // for(let i=0; i<length; i++) {
+          //   for(let j=0; j<this.todoList.length; j++) {
+          //     if(this.todoList[j].checked == true) {
+          //       this.todoList.splice(j, 1);
+          //     }
+          //   }
+          // }
+          this.todoList = this.todoList.filter(function (item) {
+            return item.checked == false;
+          })
         }
       },
       computed: {
