@@ -65,8 +65,8 @@
         updateTodo: function () {
           this.$emit('up-count', this.todo, this.date);
         },
-        deleteComplete: function (idx) {
-          this.todoList[idx].checked.splice(1, idx);
+        deleteComplete: function () {
+          
         },
         completeSort: function () {
           this.todoList.sort(function (a, b) {return a.date < b.date ? -1 : a.date > b.date ? 1 : 0})

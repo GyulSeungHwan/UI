@@ -23,25 +23,29 @@ export default {
   },
   methods: {
     boardSave: function () {
-      let dataArray = this.$parent.getDataArray();
 
-      let no = 1;
-      if(dataArray.length != 0) {
-        let index = dataArray.length - 1;
-        no = parseInt(dataArray[index].no) + 1;
-      }
+      fetch('http://192.168.0.51:8081/myserver/boardInsert', {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({title: this.title, content: this.content})
+      })
+      .then(response => response.json())
+      .then(data => { // then - 결과를 성공했을때 실행시키는 것
+        console.log(data);
+        this.$router.push({name: 'boardList'});
+      })
+      .catch(err => console.log(err));
 
-      let board_info = {
-        'no': no,
-        'title': this.title,
-        'content': this.content,
-        'view': 0
-      }
+      // GET 방식으로 했던 것
+      // fetch('http://192.168.0.51:8081/myserver/boardInsert?title=' + this.title + "&content=" + this.content)
+      // .then(response => response.json())
+      // .then(data => console.log(data))
+      // .catch(err => console.log(err));
 
-      dataArray.push(board_info);
-
-      this.$parent.setDataArray(dataArray);
-      this.$router.push({name: 'boardList'});
+      // this.$router.push({name: 'boardList'}); // 강제로 경로를 요청
+      // 비동기 방식이라서 fetch의 내용이 처리되기도 전에 실행되어 버린다
     }
   }
 }

@@ -21,23 +21,27 @@ export default {
                     <!-- <button style="float:right;" v-on:click="boardWrite">글쓰기</button> -->
                     <router-link tag="button" style="float:right;" to="/boardWrite">글쓰기</router-link>
                 </div>`,
-  data: function() {
+  data: function () {
     return {
       object: []
     }
   },
-  created: function() {
+  created: function () {
     fetch('http://192.168.0.51:8081/myserver/boardAll')
-    .then(response => response.json())
-    .then(data => {
-      // console.log(data);
-      this.object = data;
-    })
-    .catch(err => console.log(err));
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data);
+        this.object = data;
+      })
+      .catch(err => console.log(err));
   },
   methods: {
-    boardDelete: function() {
-      fetch('http://192.168.0.51:8081/myserver/boardDelete') 
+    boardDelete: function (no) {
+      fetch('http://192.168.0.51:8081/myserver/boardDelete' + no)
+      .then(response => response.text())
+      // response.json - json 타입일때만 가능하다
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
     }
   }
 }
